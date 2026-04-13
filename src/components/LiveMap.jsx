@@ -42,11 +42,17 @@ const LiveMap = () => {
         center={nagpurCenter} 
         zoom={13} 
         scrollWheelZoom={false} 
-        style={{ height: '400px', width: '100%', borderRadius: '12px' }}
+        style={{ 
+          height: '400px', 
+          width: '100%', 
+          borderRadius: '16px',
+          boxShadow: '0 0 20px rgba(34, 211, 238, 0.15)',
+          border: '1px solid rgba(34, 211, 238, 0.2)'
+        }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         />
         {buses.map(bus => {
           const loc = busLocations[bus.id];

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, Phone, Star, Shield, Clock, MapPin, BarChart3, TrendingUp } from 'lucide-react';
+import { ArrowLeft, User, Phone, Star, Shield, Clock, MapPin, BarChart3, TrendingUp, Calendar, Activity } from 'lucide-react';
 import { buses, drivers } from '../mockData';
+import HistoryMap from '../components/HistoryMap';
 import '../styles/BusDetail.css';
 
 const BusDetail = () => {
@@ -9,6 +10,11 @@ const BusDetail = () => {
   const navigate = useNavigate();
   const bus = buses.find(b => b.id === id);
   const driver = drivers.find(d => d.id === bus?.driverId);
+
+  // History state
+  const historyDates = bus?.routeHistory ? Object.keys(bus.routeHistory).sort().reverse() : [];
+  const [selectedDate, setSelectedDate] = useState(historyDates[0] || '');
+  const currentPath = bus?.routeHistory ? bus.routeHistory[selectedDate] : [];
 
   if (!bus) return <div className="p-4">Bus not found</div>;
 
@@ -146,6 +152,59 @@ const BusDetail = () => {
           </div>
         </section>
       </div>
+
+      {/* New Route History Section */}
+      <section className="glass-card history-section-full">
+        <div className="section-head-main">
+          <div className="header-left">
+            <Activity size={24} className="accent-icon" />
+            <div>
+              <h2>Route Highlight & History</h2>
+              <p className="subtitle">Visualizing traveled paths and geo-breadcrumbs</p>
+            </div>
+          </div>
+          <div className="date-selector">
+            <Calendar size={18} />
+            <select 
+              value={selectedDate} 
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className="history-select"
+            >
+              {historyDates.length > 0 ? (
+                historyDates.map(date => (
+                  <option key={date} value={date}>{date}</option>
+                ))
+              ) : (
+                <option value="">No history available</option>
+              )}
+            </select>
+          </div>
+        </div>
+
+        <div className="history-content-grid">
+          <div className="map-column">
+            <HistoryMap path={currentPath} />
+          </div>
+          <div className="history-stats-column">
+            <div className="h-stat-card">
+              <span className="h-label">Total Distance</span>
+              <span className="h-value">12.4 km</span>
+            </div>
+            <div className="h-stat-card">
+              <span className="h-label">Avg. Speed</span>
+              <span className="h-value">38 km/h</span>
+            </div>
+            <div className="h-stat-card">
+              <span className="h-label">Start Time</span>
+              <span className="h-value">07:45 AM</span>
+            </div>
+            <div className="h-stat-card">
+              <span className="h-label">End Time</span>
+              <span className="h-value">09:15 AM</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
