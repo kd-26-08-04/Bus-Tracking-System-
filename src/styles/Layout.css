@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: 280px; /* Width of Sidebar */
+  background: var(--bg-primary);
+  min-height: 100vh;
+  position: relative;
+}
+
+@media (max-width: 1024px) {
+  .main-content {
+    margin-left: 80px;
+  }
+}
